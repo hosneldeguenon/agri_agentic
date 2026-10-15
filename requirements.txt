@@ -1,0 +1,8 @@
+mcp[cli]>=1.2,<2
+mcp-server-sqlite
+smolagents[mcp,openai]>=1.20
+websockets
+pandas
+numpy
+scikit-learn
+pytest

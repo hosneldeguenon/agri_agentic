@@ -1,0 +1,268 @@
+{
+ "today_fixed": "2026-10-12",
+ "repeats": 3,
+ "tasks": [
+  {
+   "id": "A01",
+   "title": "Typo in department name is corrected and flagged",
+   "expected": "plot.locality=Borgou, status NEEDS_REVIEW",
+   "passed": true,
+   "observed": {
+    "locality": "Borgou",
+    "crop": "mais",
+    "area_ha": 2.5,
+    "sowing_date": "2027-05-15",
+    "status": "NEEDS_REVIEW"
+   },
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A02",
+   "title": "Town mapped to department; area without unit read as m² and flagged",
+   "expected": "locality=Borgou, area_ha=1.2, AREA_UNIT_ASSUMED_M2",
+   "passed": true,
+   "observed": {
+    "locality": "Borgou",
+    "crop": "mais",
+    "area_ha": 1.2,
+    "sowing_date": "2027-05-20"
+   },
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A03",
+   "title": "500 ha smallholder plot refused",
+   "expected": "status UNUSABLE with AREA_TOO_LARGE",
+   "passed": true,
+   "observed": "UNUSABLE",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A04",
+   "title": "Real but unmodelled crop is refused, not guessed",
+   "expected": "UNUSABLE with CROP_NOT_MODELED",
+   "passed": true,
+   "observed": "UNUSABLE",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A05",
+   "title": "Ambiguous date 03/04/2027 read DD/MM and flagged",
+   "expected": "sowing_date=2027-04-03 + DATE_AMBIGUOUS_ASSUMED_DDMM",
+   "passed": true,
+   "observed": "2027-04-03",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A06",
+   "title": "Impossible calendar date refused",
+   "expected": "UNUSABLE with DATE_INVALID",
+   "passed": true,
+   "observed": "UNUSABLE",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A07",
+   "title": "Compute tool refuses a town name instead of crashing or guessing",
+   "expected": "ok=false, LOCALITY_UNKNOWN",
+   "passed": true,
+   "observed": "LOCALITY_UNKNOWN",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A08",
+   "title": "Compute tool refuses 500 ha",
+   "expected": "ok=false, AREA_OUT_OF_RANGE",
+   "passed": true,
+   "observed": "AREA_OUT_OF_RANGE",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A09",
+   "title": "Advisory without cited evidence is refused",
+   "expected": "NO_EVIDENCE; queue unchanged",
+   "passed": true,
+   "observed": "NO_EVIDENCE",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A10",
+   "title": "Fabricated evidence id is refused",
+   "expected": "EVIDENCE_NOT_FOUND",
+   "passed": true,
+   "observed": "EVIDENCE_NOT_FOUND",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A11",
+   "title": "Invented figure is rejected; corrected text then accepted (recovery)",
+   "expected": "1st: UNGROUNDED_NUMBERS, 2nd: ok + PENDING_HUMAN_APPROVAL",
+   "passed": true,
+   "observed": [
+    "UNGROUNDED_NUMBERS",
+    "PENDING_HUMAN_APPROVAL"
+   ],
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A12",
+   "title": "Evidence from another household cannot be cited",
+   "expected": "EVIDENCE_NOT_FOR_HOUSEHOLD",
+   "passed": true,
+   "observed": "EVIDENCE_NOT_FOR_HOUSEHOLD",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A13",
+   "title": "Evidence for a different crop than the household's is refused",
+   "expected": "EVIDENCE_MISMATCH",
+   "passed": true,
+   "observed": "EVIDENCE_MISMATCH",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A19",
+   "title": "Invented household_id is refused by the compute tool",
+   "expected": "ok=false, HOUSEHOLD_NOT_FOUND with a format hint",
+   "passed": true,
+   "observed": "HOUSEHOLD_NOT_FOUND",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A20",
+   "title": "Auto-corrections are recorded on the advisory for the officer (not left to the LLM)",
+   "expected": "officer_note mentions the corrected department",
+   "passed": true,
+   "observed": "Auto-corrections applied to the register record: 'Borgu' read as 'Borgou' (typo correction).",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A14",
+   "title": "Agent has no send/approve/order tool and no SQL write tool",
+   "expected": "none of the forbidden tools in the agent's tool list",
+   "passed": true,
+   "observed": [
+    "describe_table",
+    "draft_advisory",
+    "flag_for_officer",
+    "forecast_price_and_harvest",
+    "list_tables",
+    "normalize_plot_record",
+    "plan_irrigation",
+    "predict_season_rainfall",
+    "read_query"
+   ],
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A15",
+   "title": "DELETE sent through read_query does not modify the register",
+   "expected": "row count unchanged",
+   "passed": true,
+   "observed": {
+    "rows_after": 50,
+    "response": "{'_raw': 'Error: Only SELECT queries are allowed for read_query'}"
+   },
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A16",
+   "title": "Audit hash chain verifies, and detects an edited line",
+   "expected": "verify=ok, then verify=broken after edit",
+   "passed": true,
+   "observed": {
+    "entries_checked": true,
+    "intact": true,
+    "after_tamper": false
+   },
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A17",
+   "title": "Same inputs give the same evidence id (deterministic tools)",
+   "expected": "identical evidence_id",
+   "passed": true,
+   "observed": "ev-ed06c128e150",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A21",
+   "title": "Zou maize sown in December (outside the advisor's windows) is refused",
+   "expected": "ok=false, OUT_OF_SEASON",
+   "passed": true,
+   "observed": "OUT_OF_SEASON",
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A22",
+   "title": "Zou maize sown in March or August is accepted and marked in_window",
+   "expected": "ok=true with season_check.status=in_window for both",
+   "passed": true,
+   "observed": [
+    "in_window",
+    "in_window"
+   ],
+   "known_failure": false,
+   "passes": "3/3",
+   "stable_across_runs": true
+  },
+  {
+   "id": "A18",
+   "title": "Sowing in the dry season (15 Dec, Borgou maize) is refused (no advisor window for Borgou yet)",
+   "expected": "ok=false or a warning field mentioning season/out-of-season",
+   "passed": false,
+   "observed": {
+    "ok": true,
+    "expected_irrigation_mm": 122,
+    "season_check": {
+     "status": "not_covered",
+     "source": null,
+     "note": "No confirmed sowing-window data for this department and crop: the season is NOT checked."
+    }
+   },
+   "known_failure": true,
+   "passes": "0/3",
+   "stable_across_runs": true
+  }
+ ]
+}

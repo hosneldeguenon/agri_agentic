@@ -1,0 +1,535 @@
+{
+ "mode": "pipeline",
+ "model": "qwen2.5:7b-instruct",
+ "repeats": 3,
+ "today_fixed": "2026-10-12",
+ "invariants_per_run": [
+  {
+   "advisories_queued": 43,
+   "advisories_not_pending": 0,
+   "advisories_with_ungrounded_numbers": 0,
+   "audit_chain_ok": true
+  },
+  {
+   "advisories_queued": 43,
+   "advisories_not_pending": 0,
+   "advisories_with_ungrounded_numbers": 0,
+   "audit_chain_ok": true
+  },
+  {
+   "advisories_queued": 43,
+   "advisories_not_pending": 0,
+   "advisories_with_ungrounded_numbers": 0,
+   "audit_chain_ok": true
+  }
+ ],
+ "recovery": null,
+ "households": [
+  {
+   "id": "HH-AL-001",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 7.61,
+   "mean_input_tokens": 363,
+   "mean_output_tokens": 90
+  },
+  {
+   "id": "HH-AL-002",
+   "expected_class": "UNUSABLE",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 0.07,
+   "mean_input_tokens": 0,
+   "mean_output_tokens": 0
+  },
+  {
+   "id": "HH-AL-003",
+   "expected_class": "NEEDS_REVIEW",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.28,
+   "mean_input_tokens": 383,
+   "mean_output_tokens": 107
+  },
+  {
+   "id": "HH-AL-004",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.88,
+   "mean_input_tokens": 368,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-AL-005",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [
+    "UNGROUNDED_NUMBERS"
+   ],
+   "mean_seconds": 4.03,
+   "mean_input_tokens": 891,
+   "mean_output_tokens": 180
+  },
+  {
+   "id": "HH-AL-006",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.98,
+   "mean_input_tokens": 384,
+   "mean_output_tokens": 92
+  },
+  {
+   "id": "HH-AL-007",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.6,
+   "mean_input_tokens": 368,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-AL-008",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.78,
+   "mean_input_tokens": 364,
+   "mean_output_tokens": 81
+  },
+  {
+   "id": "HH-AL-009",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.03,
+   "mean_input_tokens": 384,
+   "mean_output_tokens": 93
+  },
+  {
+   "id": "HH-AT-001",
+   "expected_class": "UNUSABLE",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 0.07,
+   "mean_input_tokens": 0,
+   "mean_output_tokens": 0
+  },
+  {
+   "id": "HH-AT-002",
+   "expected_class": "UNUSABLE",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 0.06,
+   "mean_input_tokens": 0,
+   "mean_output_tokens": 0
+  },
+  {
+   "id": "HH-AT-003",
+   "expected_class": "NEEDS_REVIEW",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.93,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 87
+  },
+  {
+   "id": "HH-AT-004",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.87,
+   "mean_input_tokens": 368,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-AT-005",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.91,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 88
+  },
+  {
+   "id": "HH-AT-006",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.93,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 88
+  },
+  {
+   "id": "HH-AT-007",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.87,
+   "mean_input_tokens": 368,
+   "mean_output_tokens": 84
+  },
+  {
+   "id": "HH-AT-008",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.91,
+   "mean_input_tokens": 368,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-AT-009",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.86,
+   "mean_input_tokens": 368,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-BO-001",
+   "expected_class": "NEEDS_REVIEW",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.93,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 87
+  },
+  {
+   "id": "HH-BO-002",
+   "expected_class": "NEEDS_REVIEW",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.93,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-BO-003",
+   "expected_class": "UNUSABLE",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 0.07,
+   "mean_input_tokens": 0,
+   "mean_output_tokens": 0
+  },
+  {
+   "id": "HH-BO-004",
+   "expected_class": "UNUSABLE",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 0.07,
+   "mean_input_tokens": 0,
+   "mean_output_tokens": 0
+  },
+  {
+   "id": "HH-BO-005",
+   "expected_class": "UNUSABLE",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 0.07,
+   "mean_input_tokens": 0,
+   "mean_output_tokens": 0
+  },
+  {
+   "id": "HH-BO-006",
+   "expected_class": "NEEDS_REVIEW",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.89,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 87
+  },
+  {
+   "id": "HH-BO-007",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.13,
+   "mean_input_tokens": 368,
+   "mean_output_tokens": 99
+  },
+  {
+   "id": "HH-BO-008",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.9,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-BO-009",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.91,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 87
+  },
+  {
+   "id": "HH-BO-010",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.92,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 87
+  },
+  {
+   "id": "HH-BO-011",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.86,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 87
+  },
+  {
+   "id": "HH-BO-012",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.89,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 87
+  },
+  {
+   "id": "HH-CO-001",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.2,
+   "mean_input_tokens": 389,
+   "mean_output_tokens": 103
+  },
+  {
+   "id": "HH-CO-002",
+   "expected_class": "NEEDS_REVIEW",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.16,
+   "mean_input_tokens": 383,
+   "mean_output_tokens": 99
+  },
+  {
+   "id": "HH-CO-003",
+   "expected_class": "NEEDS_REVIEW",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.02,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 90
+  },
+  {
+   "id": "HH-CO-004",
+   "expected_class": "NEEDS_REVIEW",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [
+    "UNGROUNDED_NUMBERS"
+   ],
+   "mean_seconds": 4.39,
+   "mean_input_tokens": 891,
+   "mean_output_tokens": 197
+  },
+  {
+   "id": "HH-CO-005",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.05,
+   "mean_input_tokens": 383,
+   "mean_output_tokens": 94
+  },
+  {
+   "id": "HH-CO-006",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.31,
+   "mean_input_tokens": 389,
+   "mean_output_tokens": 108
+  },
+  {
+   "id": "HH-CO-007",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.95,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 87
+  },
+  {
+   "id": "HH-CO-008",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.97,
+   "mean_input_tokens": 383,
+   "mean_output_tokens": 94
+  },
+  {
+   "id": "HH-CO-009",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.0,
+   "mean_input_tokens": 383,
+   "mean_output_tokens": 95
+  },
+  {
+   "id": "HH-CO-010",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.22,
+   "mean_input_tokens": 388,
+   "mean_output_tokens": 109
+  },
+  {
+   "id": "HH-ZO-001",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.84,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-ZO-002",
+   "expected_class": "OUT_OF_SEASON",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [
+    "OUT_OF_SEASON"
+   ],
+   "mean_seconds": 0.06,
+   "mean_input_tokens": 0,
+   "mean_output_tokens": 0
+  },
+  {
+   "id": "HH-ZO-003",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.9,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 90
+  },
+  {
+   "id": "HH-ZO-004",
+   "expected_class": "NEEDS_REVIEW",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.87,
+   "mean_input_tokens": 383,
+   "mean_output_tokens": 84
+  },
+  {
+   "id": "HH-ZO-005",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.95,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 87
+  },
+  {
+   "id": "HH-ZO-006",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.85,
+   "mean_input_tokens": 369,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-ZO-007",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.89,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 86
+  },
+  {
+   "id": "HH-ZO-008",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.25,
+   "mean_input_tokens": 369,
+   "mean_output_tokens": 99
+  },
+  {
+   "id": "HH-ZO-009",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 2.08,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 88
+  },
+  {
+   "id": "HH-ZO-010",
+   "expected_class": "OK",
+   "pass_rate": "3/3",
+   "passed_all": true,
+   "errors_seen": [],
+   "mean_seconds": 1.97,
+   "mean_input_tokens": 370,
+   "mean_output_tokens": 94
+  }
+ ]
+}

@@ -1,0 +1,131 @@
+AGRI-PREDICT : DONNÉES, SOURCES, LOIS ET DATES
+Document rédigé le 14/10/2026. Version du moteur : moteur_agro.py (ET0 corrigée).
+
+====================================================================
+1. À RETENIR
+====================================================================
+- Aucune observation réelle n'est utilisée. Les 5 jeux de données sont SIMULÉS
+  par des scripts Python (numpy, graine aléatoire 42).
+- Aucune donnée n'a été téléchargée depuis une source externe : il n'y a donc
+  pas de "date de récupération". Date de génération des CSV : 28/09/2026.
+- CHIRPS, ERA5-Land, Sentinel-2, SoilGrids, SIM-Agricole sont cités dans le
+  cahier des charges comme sources CIBLES. Ils ne sont pas utilisés.
+- Les résultats sont des estimations de prototype, non validées sur le terrain.
+
+====================================================================
+2. JEUX DE DONNÉES
+====================================================================
+Périmètre commun : 12 départements du Bénin (Alibori, Atacora, Atlantique,
+Borgou, Collines, Couffo, Donga, Littoral, Mono, Oueme, Plateau, Zou).
+
+M1 dataset_M1_pluie_saisonniere.csv   528 lignes (12 x 44 ans, 1981-2024)
+   Utilisé : température de l'Atlantique (sst), indice ENSO, humidité de l'air,
+   pluie de la saison précédente, département -> pluie totale de la saison.
+   Génération : pluie ~ Normale(moyenne, écart-type du département)
+   x (1 + 0,08 sst) x (1 - 0,06 enso) x (1 + 0,005 (humidité - 45)).
+   La pluie précédente est aléatoire (sans signal).
+
+M2 dataset_M2_scenarios_journaliers.csv   288 000 lignes
+   (12 départements x 20 ans 2005-2024 x 10 scénarios x 120 jours)
+   Utilisé : profils de pluie journalière (colonne pluie_journaliere_mm).
+   Non utilisé : probabilite_scenario (aléatoire, sans signification).
+   Génération : 35 % de jours pluvieux, intensités Gamma, rééchelonnées sur
+   le cumul visé. Aucune saisonnalité calendaire.
+
+M3 dataset_M3_etc_fao56.csv   35 040 lignes (12 x 365 jours x 8 cultures)
+   Utilisé : temp_max, temp_min, rayonnement (-> ET0 moyenne par département).
+   Non utilisés : et0_mm (environ 8 mm/jour, trop élevé), kc, etc, humidité, vent.
+   Génération : températures et rayonnement tirés selon la zone (nord / sud),
+   sans variation saisonnière.
+
+M4 dataset_M4_prix_marche.csv   21 600 lignes
+   (12 x 15 cultures x 10 ans 2015-2024 x 12 mois)
+   Utilisé : prix_moyen (FCFA/kg) de 5 cultures : maïs, riz, igname, manioc,
+   tomate. Non utilisés : production_nationale, stock_national,
+   prix_mois_precedent.
+   Génération : prix de base x saisonnalité x (1 + 0,02 x (année - 2015))
+   x bruit Normale(1 ; 0,08), borné à 60-150 % du prix de base.
+
+M5 dataset_M5_irrigation.csv   28 800 lignes
+   NON utilisé par l'application. Le plan d'irrigation est calculé par le
+   bilan hydrique (section 4), pas appris sur ce fichier.
+
+Provenance des paramètres de simulation (pluie moyenne par département,
+températures, prix de base, saisonnalité) : fixés dans vos scripts. Leur source
+d'origine n'est pas documentée ; elle ne peut pas être attribuée à CHIRPS, ERA5
+ou SIM-Agricole.
+
+====================================================================
+3. PARAMÈTRES AGRONOMIQUES
+====================================================================
+- Kc (initial / milieu / fin), repris du script M3 :
+  maïs 0,3/1,2/0,5 ; riz 1,05/1,2/0,9 ; tomate 0,6/1,15/0,8 ;
+  manioc 0,3/0,8/0,5 ; igname 0,4/1,0/0,6.
+  Étiquetés FAO-56 dans le script, non revérifiés un par un contre la table
+  FAO-56. L'igname, à notre connaissance absente de FAO-56, est à valider.
+- Durée des phases (jours) : milieux des fourchettes du cahier des charges.
+  Cycle : maïs 98, riz 115, tomate 86, igname 206, manioc 342.
+- Réserve en eau du sol : capacité au champ 100 mm, point de flétrissement 30 mm.
+  Seuil d'irrigation : 20 mm de déficit. Maximum : 30 mm/jour (script M5).
+- Stockage maximal : maïs et riz 6 mois, igname 4 mois, manioc et tomate 0
+  (périssables). Hypothèses du prototype, à valider avec un agronome.
+- Production de la démo : 5,4 t (2 ha x 2,7 t/ha, exemple du cahier des
+  charges). Part vendue à la récolte : 45 % (exemple 2,4 t sur 5,4 t).
+
+====================================================================
+4. LOIS ET MÉTHODES
+====================================================================
+L1  Pluie de la saison (M1) : régression Ridge (alpha = 1) sur 4 variables
+    climatiques + département.
+L2  Trois scénarios : cumul = prévision M1 + z x sigma, avec z = -1, 0, +1 et
+    probabilités 25 % / 50 % / 25 %. Chaque cumul est réparti sur 120 jours
+    par un profil historique de pluie journalière (M2).
+L3  Évapotranspiration de référence, Hargreaves-Samani (version rayonnement) :
+    ET0 = 0,0135 x (T moyenne + 17,8) x Rs x 0,408
+    (Rs en MJ/m2/jour ; résultat borné entre 2 et 10 mm/jour).
+    Résultat : environ 5,0 mm/jour (nord) et 4,3 mm/jour (sud).
+    Références : Hargreaves et Samani (1982, 1985) ; FAO-56.
+L4  Besoin de la culture (FAO-56) : ETc = ET0 x Kc. Kc constant en phase
+    initiale, croissance linéaire en phase de développement, constant à
+    mi-saison, décroissance linéaire en fin de cycle.
+L5  Pluie efficace (simplification USDA-SCS du cahier des charges) :
+    Peff = 0,8 x P si P <= 75 mm ; Peff = 0,3 x P + 37,5 sinon.
+L6  Bilan hydrique journalier : SW(j+1) = SW(j) + Peff - ETc - drainage
+    + irrigation. Drainage = excédent au-delà de 100 mm. Irrigation =
+    min(déficit, 30 mm) lorsque le déficit dépasse 20 mm.
+L7  Volume d'eau : 1 mm sur 1 ha = 10 m3.
+L8  Prix : régression linéaire (tendance + effet du mois) sur 2015-2024,
+    prolongée à partir de janvier 2025. Fourchette = prévision +/- 1,28 x
+    écart-type des résidus.
+L9  Récolte : date = date de semis + durée du cycle. Conseil de stockage :
+    comparaison du prix du mois de récolte au meilleur prix de la fenêtre.
+L10 Texte explicatif : Gemini (Google) reformule les chiffres calculés.
+    Il n'effectue aucun calcul. Texte de secours sans IA si la clé est absente.
+
+====================================================================
+5. VALIDATION (sur données simulées)
+====================================================================
+- M1 : apprentissage 1981-2014, test 2015-2024. Erreur moyenne 116 mm,
+  contre 134 mm pour la simple moyenne locale ; R2 = 0,69.
+- Prix : test sur les 24 derniers mois, 60 séries. Erreur moyenne 28,7 FCFA/kg
+  (SARIMA : 34,4). La fourchette contient la valeur réelle dans environ 70 %
+  des cas.
+- Ces mesures portent sur des données simulées. Elles ne prouvent rien sur la
+  précision réelle.
+
+====================================================================
+6. LIMITES CONNUES
+====================================================================
+- Pas de saison des pluies calendaire : un semis en saison sèche reçoit quand
+  même une "saison normale".
+- Prix connus jusqu'en décembre 2024 : les prévisions 2027-2028 sont lointaines.
+- Plan d'irrigation limité à 120 jours (igname et manioc : cycle plus long).
+- Même profil de jours de pluie pour les 3 scénarios : peu d'écart d'irrigation
+  entre scénario sec et humide.
+
+====================================================================
+7. POUR PASSER AUX DONNÉES RÉELLES
+====================================================================
+Pluie : CHIRPS. Température, rayonnement, vent, humidité : ERA5-Land.
+Prix : SIM-Agricole. Rendements : INStaD. Pour chaque source, consigner l'URL,
+la version, la période et la date de téléchargement dans ce document.

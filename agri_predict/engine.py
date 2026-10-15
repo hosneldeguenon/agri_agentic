@@ -1,6 +1,7 @@
-"""Moteur agronomique : pluie saisonnière, scénarios, besoin en eau (FAO-56),
-plan d'irrigation, prix, date de récolte, texte explicatif.
-Les 5 fichiers dataset_M*.csv doivent être dans le même dossier que ce fichier."""
+"""Agronomic engine (pre-existing prototype code, kept as the deterministic compute layer).
+Seasonal rainfall (ridge regression), rainfall scenarios, FAO-56 crop water need,
+irrigation plan, price trend, harvest date. No LLM call in this module.
+CSV files are read from ./data (override with AGRI_DATA_DIR)."""
 import os
 import json
 from functools import lru_cache
@@ -10,7 +11,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import Ridge
 
-DATA = Path(__file__).resolve().parent
+DATA = Path(os.environ.get("AGRI_DATA_DIR", Path(__file__).resolve().parent.parent / "data"))
 
 # ============================================================ M1 : pluie saisonnière
 VARS_M1 = ["sst_atlantique", "enso_index", "humidite_atm", "pluie_saison_precedente"]
@@ -86,8 +87,13 @@ NOM_CULTURE = {"mais": "maïs", "riz": "riz", "igname": "igname", "manioc": "man
 
 @lru_cache(maxsize=1)
 def _et0_moy():
+    """Mean reference evapotranspiration (mm/day) per department, Hargreaves-Samani (radiation form):
+    ET0 = 0.0135 * (Tmean + 17.8) * Rs * 0.408, clipped to 2-10 mm/day, from the (simulated) M3 temperatures and
+    solar radiation. The M3 column `et0_mm` (about 8 mm/day in the north) is deliberately NOT used: too high."""
     m3 = pd.read_csv(DATA / "dataset_M3_etc_fao56.csv")
-    return m3.groupby("localite").et0_mm.mean()
+    tmean = (m3.temp_max + m3.temp_min) / 2
+    et0 = (0.0135 * (tmean + 17.8) * m3.rayonnement * 0.408).clip(2, 10)
+    return et0.groupby(m3.localite).mean()
 
 
 def courbe_kc(culture):
@@ -109,7 +115,7 @@ def calculer_etc(localite, culture):
 
 # ============================================================ Bilan hydrique et irrigation
 FC, PWP, SEUIL, IRR_MAX = 100.0, 30.0, 20.0, 30.0   # mm
-FACTEUR_ET0 = 1.0                                     # laisser 1.0 (l'ET0 du dataset M3 est élevée)
+FACTEUR_ET0 = 1.0                                     # keep at 1.0 (ET0 is now computed by Hargreaves-Samani)
 
 
 def pluie_efficace(p):
@@ -336,70 +342,3 @@ def texte_hors_ligne(res):
     t.append(v)
     t.append("Ces chiffres sont des estimations : à confirmer avec un conseiller agricole.")
     return "\n\n".join(t)
-
-
-MODELES = ["gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash"]
-NOMS_SECRET = ["GEMINI_API_KEY", "Gemini API Key", "GOOGLE_API_KEY"]
-
-
-def _cle_api():
-    """Cherche la clé : secrets Streamlit, secrets Colab, puis variables d'environnement."""
-    try:
-        import streamlit as st
-        for nom in NOMS_SECRET:
-            if nom in st.secrets:
-                return st.secrets[nom]
-    except Exception:
-        pass
-    try:
-        from google.colab import userdata
-        for nom in NOMS_SECRET:
-            try:
-                return userdata.get(nom)
-            except Exception:
-                continue
-    except Exception:
-        pass
-    return os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-
-
-def expliquer(resume):
-    """Texte en français simple (Gemini si la clé existe, sinon texte de secours)."""
-    cle = _cle_api()
-    if not cle:
-        return ("[Mode hors ligne : clé API introuvable — vérifiez le secret GEMINI_API_KEY]\n\n"
-                + texte_hors_ligne(resume))
-    derniere = None
-    try:
-        from google import genai
-        from google.genai import types
-        client = genai.Client(api_key=cle)
-        for modele in MODELES:
-            try:
-                rep = client.models.generate_content(
-                    model=modele,
-                    contents=json.dumps(resume, ensure_ascii=False),
-                    config=types.GenerateContentConfig(system_instruction=CONSIGNES,
-                                                       temperature=0.3, max_output_tokens=8192))
-                fin = str(rep.candidates[0].finish_reason) if rep.candidates else ""
-                if "MAX_TOKENS" in fin:
-                    derniere = ValueError("réponse tronquée")
-                    continue
-                if rep.text and rep.text.strip():
-                    return rep.text
-                derniere = ValueError("réponse vide")
-            except Exception as e:
-                derniere = e
-    except Exception as e:
-        derniere = e
-    return f"[Mode hors ligne : appel à Gemini impossible ({type(derniere).__name__})]\n\n" + texte_hors_ligne(resume)
-
-
-DEMOS = [("Borgou", "mais", 2, "2027-05-15", 5.4),
-         ("Littoral", "tomate", 0.5, "2027-11-10", None),
-         ("Donga", "igname", 1.5, "2027-03-15", None)]
-
-if __name__ == "__main__":
-    for loc, cul, ha, d, prod in DEMOS:
-        print(expliquer(recommander(loc, cul, ha, d, prod)["resume"]))
-        print("=" * 50)
